@@ -1,3 +1,5 @@
+// Copyright 2019 denxhun
+
 #include <computhermrf.h>
 
 const uint16_t ComputhermRF::_TICK_LENGTH = 220;
@@ -16,15 +18,25 @@ volatile bool ComputhermRF::_avail;
 volatile byte ComputhermRF::_buff[_BUFF_SIZE];
 volatile byte ComputhermRF::_buffEnd;
 byte ComputhermRF::_lastBuff[_BUFF_SIZE];
-unsigned long ComputhermRF::_lastMessageArrived;
+uint32_t ComputhermRF::_lastMessageArrived;
+
+ComputhermRF::ComputhermRF() {
+  ComputhermRF(255, 255);
+}
 
 ComputhermRF::ComputhermRF(uint8_t inputPin, uint8_t outputPin) {
+  setPins(inputPin, outputPin);
+}
+
+void ComputhermRF::setPins(uint8_t inputPin, uint8_t outputPin) {
+  stopReceiver();
   _inputPin = inputPin;
   _outputPin = outputPin;
   if (_outputPin < 255) {
     pinMode(_outputPin, OUTPUT);
   }
 }
+
 void ComputhermRF::startReceiver() {
   if (_inputPin < 255) {
     pinMode(_inputPin, INPUT);
@@ -43,7 +55,7 @@ bool ComputhermRF::isDataAvailable() {
 void ComputhermRF::getData(String &id, bool &on) {
     computhermMessage result = getData();
     id = result.address;
-    on = result.command?"ON":"OFF";
+    on = (result.command == "ON");
 }
 computhermMessage ComputhermRF::getData() {
   computhermMessage result;
@@ -159,7 +171,7 @@ bool ComputhermRF::_isRepeat() {
   return result;
 }
 void ComputhermRF::_handler() {
-  static unsigned long lastMs = 0, currMs, diffMs;
+  static uint32_t lastMs = 0, currMs, diffMs;
   currMs = micros();
   diffMs = currMs - lastMs;
   lastMs = currMs;

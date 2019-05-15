@@ -49,7 +49,9 @@ typedef struct{
 
 class ComputhermRF{
 public:
+  ComputhermRF();
   ComputhermRF(uint8_t inputPin, uint8_t outputPin);
+  void setPins(uint8_t inputPin, uint8_t outputPin);
   void startReceiver();
   void stopReceiver();
   bool isDataAvailable();
@@ -73,7 +75,7 @@ private:
   static volatile byte _buff[];
   static volatile byte _buffEnd;
   static byte _lastBuff[];
-  static unsigned long _lastMessageArrived;
+  static uint32_t _lastMessageArrived;
   void _wakeUpTransmitter();
   void _sendPulse(uint8_t lowTime, uint8_t highTime);
   void _sendStop();
