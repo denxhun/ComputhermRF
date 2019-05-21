@@ -170,7 +170,7 @@ bool ComputhermRF::_isRepeat() {
   _lastMessageArrived = millis();
   return result;
 }
-void ComputhermRF::_handler() {
+void ICACHE_RAM_ATTR ComputhermRF::_handler() {
   static uint32_t lastMs = 0, currMs, diffMs;
   currMs = micros();
   diffMs = currMs - lastMs;

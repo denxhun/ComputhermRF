@@ -49,6 +49,7 @@ typedef struct{
 
 class ComputhermRF{
 public:
+  const String VERSION = "0.1.2";
   ComputhermRF();
   ComputhermRF(uint8_t inputPin, uint8_t outputPin);
   void setPins(uint8_t inputPin, uint8_t outputPin);
